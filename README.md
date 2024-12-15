@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# Smart Brain
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Smart Brain is a web application that detects faces in images using the Clarifai API. Users can input the URL of an image, and the application will identify and highlight any faces present. 
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Face Detection**: Input an image URL to detect faces within the image.
+- **User Ranking**: Users' ranks are updated based on the number of images they process.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Front-End
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- HTML5
+- CSS3
+- React.js
 
-### `npm test`
+### Back-End
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js
+- Express.js
+- PostgreSQL
 
-### `npm run build`
+### NPM Packages
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Create-React-App
+- Tachyons
+- react-tilt
+- particles.js
+- Bcrypt
+- PostgreSQL
+- Knex
+- Body Parser
+- Cors
+- Express
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To set up the project locally:
 
-### `npm run eject`
+1. **Clone the Repository**:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```bash
+   git clone https://github.com/C0des-by-SAGAR/smart-brain.git
+   cd smart-brain
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Install Dependencies**:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   npm install
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. **Start the Application**:
 
-## Learn More
+   ```bash
+   npm start
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   The application will run in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Usage
 
-### Code Splitting
+1. **Enter Image URL**: Paste the URL of an image containing a face into the input field.
+2. **Detect Face**: Click the 'Detect' button to process the image.
+3. **View Results**: The application will display the image with a bounding box around the detected face(s).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Contributing
 
-### Analyzing the Bundle Size
+Contributions are welcome! To contribute:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-name`.
+3. Make your changes.
+4. Commit the changes: `git commit -m 'Add feature'`.
+5. Push to the branch: `git push origin feature-name`.
+6. Submit a pull request.
