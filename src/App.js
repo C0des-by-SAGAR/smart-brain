@@ -10,60 +10,26 @@ import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim"; 
 import './App.css';
 
-const MODEL_ID = 'face-detection';
-
-const returnClarifaiRequestOptions = (imageUrl) => {
-  const PAT = '0c110e74cc6540099dce33e4177a9717';
-  const USER_ID = 'codersagar007';
-  const APP_ID = 'smartbrain-face-detection';
-  const IMAGE_URL = imageUrl;
-
-  const raw = JSON.stringify({
-    "user_app_id": {
-        "user_id": USER_ID,
-        "app_id": APP_ID
-    },
-    "inputs": [
-        {
-            "data": {
-                "image": {
-                    "url": IMAGE_URL
-                }
-            }
-        }
-    ]
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-
-  return requestOptions;
+const initialState = {
+  init: false,
+  input: '',
+  imageUrl:'',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
 }
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      init: false,
-      input: '',
-      imageUrl:'',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-		    name: '',
-		    email: '',
-		    entries: 0,
-		    joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   componentDidMount() {
@@ -84,69 +50,65 @@ class App extends Component {
     }})
   }
 
-  onInputChange = (event) => {
-    this.setState({input: event.target.value});
-  }
-
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById('inputimage');
-    const width = Number(image.width);
-    const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
+    if (data.outputs && data.outputs[0] && data.outputs[0].data && data.outputs[0].data.regions && data.outputs[0].data.regions[0]) {
+      const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+      const image = document.getElementById('inputimage');
+      const width = Number(image.width);
+      const height = Number(image.height);
+      return {
+        leftCol: clarifaiFace.left_col * width,
+        topRow: clarifaiFace.top_row * height,
+        rightCol: width - (clarifaiFace.right_col * width),
+        bottomRow: height - (clarifaiFace.bottom_row * height)
+      }
     }
+    return {};
   }
 
   displayFaceBox = (box) => {
     this.setState({box: box});
   }
+
+  onInputChange = (event) => {
+    this.setState({input: event.target.value});
+  }
   
   onButtonSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
-    fetch('http://localhost:3000/imageurl', { // Change to proxy server
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_app_id: {
-          user_id: 'codersagar007',
-          app_id: 'smartbrain-face-detection'
-        },
-        inputs: [{
-          data: {
-            image: { url: this.state.input }
-          }
-        }]
+    this.setState({imageUrl: this.state.input});
+      fetch('http://localhost:3000/imageurl', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          input: this.state.input
+        })
       })
-    })
       .then(response => response.json())
       .then(response => {
         if (response) {
           fetch('http://localhost:3000/image', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: this.state.user.id })
-          })
-            .then(res => res.json())
-            .then(count => {
-              // Ensure count is a number before updating state
-              console.log("Updated count:", count);
-              this.setState({ user: { ...this.state.user, entries: parseInt(count, 10) } });
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: this.state.user.id
             })
-            .catch(err => console.log(err));          
+          })
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, { entries: count}))
+            })
+            .catch(console.log)
+
         }
-        this.displayFaceBox(this.calculateFaceLocation(response));
+        this.displayFaceBox(this.calculateFaceLocation(response))
       })
-      .catch(err => console.log('error', err));
-  };
-  
+      .catch(err => console.log(err));
+  }
+
   onRouteChange = (route) => {
-    if(route === 'signout') {
-      this.setState({isSignedIn: false})
-    } else if(route === 'home') {
+    if (route === 'signout') {
+      this.setState(initialState)
+    } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
     this.setState({route: route});
