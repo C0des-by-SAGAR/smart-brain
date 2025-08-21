@@ -24,6 +24,7 @@ class Register extends React.Component {
   }
 
   onSubmitRegister = () => {
+    console.log('Registering with:', this.state); // ✅ Debug log
     fetch(`${API_URL}/register`, {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -32,12 +33,26 @@ class Register extends React.Component {
         password: this.state.password,
         name: this.state.name
       })
-    }).then(res => res.json())
+    })
+    .then(res => {
+      console.log('Response status:', res.status); // ✅ Debug response status
+      if (!res.ok) {
+        return res.text().then(text => {
+          console.log('Error response:', text); // ✅ Debug error response
+          throw new Error(`HTTP ${res.status}: ${text}`);
+        });
+      }
+      return res.json();
+    })
     .then(user => {
+      console.log('Success response:', user); // ✅ Debug success response
       if(user.id) {
         this.props.loadUser(user);
         this.props.onRouteChange('home')
       }
+    })
+    .catch(error => {
+      console.error('Registration error:', error); // ✅ Debug any errors
     })
   }
 
